@@ -716,6 +716,27 @@ public class SendinBlueClient {
 		return delete("list/" + id + "/delusers", json);
 	}
 
+   /*
+		Send Transactional Email.
+		@param {Object} data contains json objects as a key value pair from HashMap.
+		@options data {Array} to: Email address of the recipient(s). It should be sent as an associative array. Example: array("to@example.net"=>"to whom"). You can use commas to separate multiple recipients [Mandatory]
+		@options data {String} subject: Message subject [Mandatory]
+		@options data {Array} from Email address for From header. It should be sent as an array. Example: array("from@email.com","from email") [Mandatory]
+		@options data {String} html: Body of the message. (HTML version) [Mandatory]. To send inline images, use <img src="{YourFileName.Extension}" alt="image" border="0" >, the 'src' attribute value inside {} (curly b
+		races) should be same as the filename used in 'inline_image' parameter
+		@options data {String} text: Body of the message. (text version) [Optional]
+		@options data {Array} cc: Same as to but for Cc. Example: array("cc@example.net","cc whom") [Optional]
+		@options data {Array} bcc: Same as to but for Bcc. Example: array("bcc@example.net","bcc whom") [Optional]
+		@options data {Array} replyto: Same as from but for Reply To. Example: array("from@email.com","from email") [Optional]
+		@options data {Array} attachment: Provide the absolute url of the attachment/s. Possible extension values = gif, png, bmp, cgm, jpg, jpeg, txt, css, shtml, html, htm, csv, zip, pdf, xml, doc, xls, ppt, tar and ez. To send attachment/s generated on the fly you have to pass your attachment/s filename & its base64 encoded chunk data as an associative array. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple attachments [Optional]
+		@options data {Array} headers: The headers will be sent along with the mail headers in original email. Example: array("Content-Type"=>"text/html; charset=iso-8859-1"). You can use commas to separate multiple headers [Optional]
+		@options data {Array} inline_image: Pass your inline image/s filename & its base64 encoded chunk data as an associative array. Possible extension values = gif, png, bmp, cgm, jpg and jpeg. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple inline images [Optional]
+	*/
+	public String sendEmailObj(Object data) {
+		String json = gson.toJson(data);
+		return post("email", json);
+	}
+
 	/**
 	 * Sends a transactional email.
 	 *
