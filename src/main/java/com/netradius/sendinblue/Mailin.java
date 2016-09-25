@@ -1,3 +1,5 @@
+package com.netradius.sendinblue;
+
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
