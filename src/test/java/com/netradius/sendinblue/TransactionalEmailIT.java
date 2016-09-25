@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import static com.netradius.sendinblue.StringHelper.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 /**
  * This test demonstrates how to send a transactional email.
@@ -21,7 +23,6 @@ public class TransactionalEmailIT {
 	private static SendinBlueClient client;
 	private static String toAddress;
 	private static String fromAddress;
-
 
 	@BeforeClass
 	public static void init() throws IOException {
@@ -53,8 +54,8 @@ public class TransactionalEmailIT {
 				.setHtml(html)
 				.validate();
 
-		SendinBlueResponse response = client.sendEmail(email);
-
+		SendinBlueResponse response = client.send(email);
+		assertThat(response.getCode(), equalTo("success"));
 		log.info("Received response: " + response);
 	}
 

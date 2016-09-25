@@ -731,7 +731,7 @@ public class SendinBlueClient {
 		@options data {Array} headers: The headers will be sent along with the mail headers in original email. Example: array("Content-Type"=>"text/html; charset=iso-8859-1"). You can use commas to separate multiple headers [Optional]
 		@options data {Array} inline_image: Pass your inline image/s filename & its base64 encoded chunk data as an associative array. Possible extension values = gif, png, bmp, cgm, jpg and jpeg. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple inline images [Optional]
 	*/
-	public String sendEmailObj(Object data) {
+	public String sendEmail(Object data) {
 		String json = gson.toJson(data);
 		return post("email", json);
 	}
@@ -742,7 +742,7 @@ public class SendinBlueClient {
 	 * @param email the email to send
 	 * @return the response or null if there was an error
 	 */
-	public SendinBlueResponse sendEmail(TransactionalEmail email) {
+	public SendinBlueResponse send(TransactionalEmail email) {
 		String json = gson.toJson(email);
 		if (log.isTraceEnabled()) {
 			log.trace("Sending JSON request body: " + json);
@@ -1033,6 +1033,26 @@ public class SendinBlueClient {
 		String id = data.get("id").toString();
 		String json = gson.toJson(data);
 		return put("template/" + id, json);
+	}
+
+	/**
+	 * Sends a transactional email using a template.
+	 *
+	 * @param email the email to send
+	 * @return the response or null if there was an error
+	 */
+	public SendinBlueResponse send(TemplateEmail email) {
+		String json = gson.toJson(email);
+		if (log.isTraceEnabled()) {
+			log.trace("Sending JSON request body: " + json);
+		}
+		String resp = post("template/" + email.getId(), json);
+		if (log.isTraceEnabled()) {
+			log.trace("Received JSON response body: " + resp);
+		}
+		return resp != null
+				? gson.fromJson(resp, SendinBlueResponse.class)
+				: null;
 	}
 
 	/*
