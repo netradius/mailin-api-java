@@ -1,6 +1,9 @@
 package com.netradius.sendinblue;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,15 +15,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-
+@Slf4j
 public class SendinBlueClient {
 
 	public static final String DEFAULT_URL = "https://api.sendinblue.com/v2.0";
 	public static final int DEFAULT_TIMEOUT = 3000; // 30 seconds
+
 	private static final String EMPTY_STRING = "";
-	private String baseUrl;
-	private String apiKey;
-	private int timeout;
+
+	protected String baseUrl;
+	protected String apiKey;
+	protected int timeout;
+	protected Gson gson;
 
 	/**
 	 * Creates a new instance of the client using the given key. The default
@@ -54,6 +60,15 @@ public class SendinBlueClient {
 		this.baseUrl = baseUrl;
 		this.apiKey = apiKey;
 		this.timeout = timeout;
+		initGson();
+	}
+
+	protected void initGson() {
+		GsonBuilder builder = new GsonBuilder();
+		if (log.isTraceEnabled()) {
+			builder.setPrettyPrinting();
+		}
+		gson = builder.create();
 	}
 
 	/**
@@ -200,7 +215,7 @@ public class SendinBlueClient {
 		try {
 			return doRequest(resource, "POST", input);
 		} catch (Exception ignored) {
-
+			log.trace("Received exception: " + ignored.getMessage(), ignored);
 		}
 		return null;
 	}
@@ -249,7 +264,6 @@ public class SendinBlueClient {
 		@options data {Array} associate_ip: Associate dedicated IPs to reseller child. You can use commas to separate multiple IPs [Optional]
 	*/
 	public String createChildAccount(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("account", json);
 	}
@@ -266,7 +280,6 @@ public class SendinBlueClient {
 		@options data {Array} disassociate_ip: Disassociate dedicated IPs from reseller child. You can use commas to separate multiple IPs [Optional]
 	*/
 	public String updateChildAccount(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("account", json);
 	}
@@ -287,7 +300,6 @@ public class SendinBlueClient {
 		@options data {String} auth_key: 16 character authorization key of Reseller child. Example : To get the details of more than one child account, use, {"key1":"abC01De2fGHI3jkL","key2":"mnO45Pq6rSTU7vWX"} [Mandatory]
 	*/
 	public String getResellerChild(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("account/getchildv2", json);
 	}
@@ -304,7 +316,6 @@ public class SendinBlueClient {
 			- sms_credit {Integer} Number of sms credts
 	*/
 	public String addRemoveChildCredits(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("account/addrmvcredit", json);
 	}
@@ -320,7 +331,6 @@ public class SendinBlueClient {
 		@options data {String} type: Type of message. Possible values – marketing (default) & transactional. You can use marketing for sending marketing SMS, & for sending transactional SMS, use transactional type [Optional]
 	*/
 	public String sendSms(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("sms", json);
 	}
@@ -338,7 +348,6 @@ public class SendinBlueClient {
 		@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 	*/
 	public String createSmsCampaign(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("sms", json);
 	}
@@ -358,7 +367,6 @@ public class SendinBlueClient {
 	*/
 	public String updateSmsCampaign(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("sms/" + id, json);
 	}
@@ -372,7 +380,6 @@ public class SendinBlueClient {
 	public String sendBatSms(Map<String, Object> data) {
 		String id = data.get("id").toString();
 		String to = data.get("to").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return get("sms/" + id + "/" + to, EMPTY_STRING);
 	}
@@ -432,7 +439,6 @@ public class SendinBlueClient {
 		@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 	*/
 	public String createCampaign(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("campaign", json);
 	}
@@ -461,7 +467,6 @@ public class SendinBlueClient {
 	*/
 	public String updateCampaign(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("campaign/" + id, json);
 	}
@@ -490,7 +495,6 @@ public class SendinBlueClient {
 	*/
 	public String campaignReportEmail(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("campaign/" + id + "/report", json);
 	}
@@ -504,7 +508,6 @@ public class SendinBlueClient {
 	*/
 	public String campaignRecipientsExport(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("campaign/" + id + "/recipients", json);
 	}
@@ -517,7 +520,6 @@ public class SendinBlueClient {
 	*/
 	public String sendBatEmail(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("campaign/" + id + "/test", json);
 	}
@@ -545,7 +547,6 @@ public class SendinBlueClient {
 		@options data {Integer} send_now: Flag to send campaign now. Possible values = 0 (default) & 1. send_now = 0 means campaign can’t be send now, & send_now = 1 means campaign ready to send now [Optional]
 	*/
 	public String createTriggerCampaign(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("campaign", json);
 	}
@@ -575,7 +576,6 @@ public class SendinBlueClient {
 	*/
 	public String updateTriggerCampaign(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("campaign/" + id, json);
 	}
@@ -586,7 +586,6 @@ public class SendinBlueClient {
 		@options data {Array} camp_ids: Id of campaign to get share link. You can use commas to separate multiple ids [Mandatory]
 	*/
 	public String shareCampaign(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("campaign/sharelinkv2", json);
 	}
@@ -599,7 +598,6 @@ public class SendinBlueClient {
 	*/
 	public String updateCampaignStatus(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("campaign/" + id + "/updatecampstatus", json);
 	}
@@ -611,7 +609,6 @@ public class SendinBlueClient {
 		@options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
 	*/
 	public String getProcesses(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return get("process", json);
 	}
@@ -634,7 +631,6 @@ public class SendinBlueClient {
 		@options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
 	*/
 	public String getLists(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return get("list", json);
 	}
@@ -656,7 +652,6 @@ public class SendinBlueClient {
 		@options data {Integer} list_parent: Folder ID [Mandatory]
 	*/
 	public String createCist(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("list", json);
 	}
@@ -680,7 +675,6 @@ public class SendinBlueClient {
 	*/
 	public String updateList(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("list/" + id, json);
 	}
@@ -694,7 +688,6 @@ public class SendinBlueClient {
 		@options data {Integer} page_limit: This should be a valid number between 1-500 [Optional]
 	*/
 	public String displayListUsers(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("list/display", json);
 	}
@@ -707,7 +700,6 @@ public class SendinBlueClient {
 	*/
 	public String addUsersList(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("list/" + id + "/users", json);
 	}
@@ -720,30 +712,28 @@ public class SendinBlueClient {
 	*/
 	public String deleteUsersList(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return delete("list/" + id + "/delusers", json);
 	}
 
-	/*
-		Send Transactional Email.
-		@param {Object} data contains json objects as a key value pair from HashMap.
-		@options data {Array} to: Email address of the recipient(s). It should be sent as an associative array. Example: array("to@example.net"=>"to whom"). You can use commas to separate multiple recipients [Mandatory]
-		@options data {String} subject: Message subject [Mandatory]
-		@options data {Array} from Email address for From header. It should be sent as an array. Example: array("from@email.com","from email") [Mandatory]
-		@options data {String} html: Body of the message. (HTML version) [Mandatory]. To send inline images, use <img src="{YourFileName.Extension}" alt="image" border="0" >, the 'src' attribute value inside {} (curly braces) should be same as the filename used in 'inline_image' parameter
-		@options data {String} text: Body of the message. (text version) [Optional]
-		@options data {Array} cc: Same as to but for Cc. Example: array("cc@example.net","cc whom") [Optional]
-		@options data {Array} bcc: Same as to but for Bcc. Example: array("bcc@example.net","bcc whom") [Optional]
-		@options data {Array} replyto: Same as from but for Reply To. Example: array("from@email.com","from email") [Optional]
-		@options data {Array} attachment: Provide the absolute url of the attachment/s. Possible extension values = gif, png, bmp, cgm, jpg, jpeg, txt, css, shtml, html, htm, csv, zip, pdf, xml, doc, xls, ppt, tar and ez. To send attachment/s generated on the fly you have to pass your attachment/s filename & its base64 encoded chunk data as an associative array. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple attachments [Optional]
-		@options data {Array} headers: The headers will be sent along with the mail headers in original email. Example: array("Content-Type"=>"text/html; charset=iso-8859-1"). You can use commas to separate multiple headers [Optional]
-		@options data {Array} inline_image: Pass your inline image/s filename & its base64 encoded chunk data as an associative array. Possible extension values = gif, png, bmp, cgm, jpg and jpeg. Example: array("YourFileName.Extension"=>"Base64EncodedChunkData"). You can use commas to separate multiple inline images [Optional]
-	*/
-	public String sendEmail(Object data) {
-		Gson gson = new Gson();
-		String json = gson.toJson(data);
-		return post("email", json);
+	/**
+	 * Sends a transactional email.
+	 *
+	 * @param email the email to send
+	 * @return the response or null if there was an error
+	 */
+	public SendinBlueResponse sendEmail(TransactionalEmail email) {
+		String json = gson.toJson(email);
+		if (log.isTraceEnabled()) {
+			log.trace("Sending JSON request body: " + json);
+		}
+		String resp = post("email", json);
+		if (log.isTraceEnabled()) {
+			log.trace("Received JSON response body: " + resp);
+		}
+		return resp != null
+				? gson.fromJson(resp, SendinBlueResponse.class)
+				: null;
 	}
 
 	/*
@@ -781,7 +771,6 @@ public class SendinBlueClient {
 		@options data {Integer} is_plat: Flag to create webhook type. Possible values – 0 (default) & 1. Example: to create Transactional webhooks, use $is_plat=0, & to create Marketing webhooks, use $is_plat=1 [Optional]
 	*/
 	public String createWebhook(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("webhook", json);
 	}
@@ -806,7 +795,6 @@ public class SendinBlueClient {
 	*/
 	public String updateWebhook(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("webhook/" + id, json);
 	}
@@ -821,7 +809,6 @@ public class SendinBlueClient {
 		@options data {String} tag: The tag you will specify to retrieve detailed stats. It must be an existing tag that has statistics [Optional]
 	*/
 	public String getStatistics(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("statistics", json);
 	}
@@ -837,7 +824,6 @@ public class SendinBlueClient {
 		@options data {Array} blacklisted_sms: This is used to blacklist/ Unblacklist a user’s SMS number. Possible values – 0 & 1. blacklisted_sms = 1 means user’s SMS number has been blacklisted [Optional]
 	*/
 	public String createUpdateUser(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("user/createdituser", json);
 	}
@@ -873,7 +859,6 @@ public class SendinBlueClient {
 		@options data {Integer} list_parent: This is the existing folder id & can be used with name parameter to make newly created list’s desired parent [Optional]
 	*/
 	public String importUsers(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("user/import", json);
 	}
@@ -886,7 +871,6 @@ public class SendinBlueClient {
 		@options data {String} notify_url: URL that will be called once the export process is finished [Optional]
 	*/
 	public String exportUsers(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("user/export", json);
 	}
@@ -917,7 +901,6 @@ public class SendinBlueClient {
 		The name and data value of ‘category’, ‘calculated’ & ‘global’, should be sent as JSON string. Example: ‘[{ "name":"ATTRIBUTE_NAME1", "value":"Attribute_value1" }, { "name":"ATTRIBUTE_NAME2", "value":"Attribute_value2" }]’. You can use commas to separate multiple attributes [Mandatory]
 	*/
 	public String createAttribute(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("attribute", json);
 	}
@@ -929,7 +912,6 @@ public class SendinBlueClient {
 	*/
 	public String deleteAttribute(Map<String, Object> data) {
 		String type = data.get("type").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("attribute/" + type, json);
 	}
@@ -946,7 +928,6 @@ public class SendinBlueClient {
 		@options data {String} email: Email address to search report for [Optional]
 	*/
 	public String getReport(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("report", json);
 	}
@@ -958,7 +939,6 @@ public class SendinBlueClient {
 		@options data {Integer} page_limit: This should be a valid number between 1-50 [Mandatory]
 	*/
 	public String getFolders(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return get("folder", json);
 	}
@@ -979,7 +959,6 @@ public class SendinBlueClient {
 		@options data {String} name: Desired name of the folder to be created [Mandatory]
 	*/
 	public String createFolder(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("folder", json);
 	}
@@ -1002,7 +981,6 @@ public class SendinBlueClient {
 	*/
 	public String updateFolder(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("folder/" + id, json);
 	}
@@ -1015,7 +993,6 @@ public class SendinBlueClient {
 		@options data {String} email: Email address to delete its bounces [Optional]
 	*/
 	public String deleteBounces(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("bounces", json);
 	}
@@ -1034,7 +1011,6 @@ public class SendinBlueClient {
 	*/
 	public String sendTransactionalTemplate(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("template/" + id, json);
 	}
@@ -1055,7 +1031,6 @@ public class SendinBlueClient {
 		@options data {Integer} attachment: Status of attachment. Possible values = 0 (default) & 1. attach = 0 means an attachment can’t be sent, & attach = 1 means an attachment can be sent, in the email [Optional]
 	*/
 	public String createTemplate(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("template", json);
 	}
@@ -1078,7 +1053,6 @@ public class SendinBlueClient {
 	*/
 	public String updateTemplate(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("template/" + id, json);
 	}
@@ -1107,7 +1081,6 @@ public class SendinBlueClient {
 		@options data {Array} ip_domain: Pass pipe ( | ) separated Dedicated IP and its associated Domain. Example: "1.2.3.4|mydomain.com". You can use commas to separate multiple ip_domain’s [Mandatory: Only for Dedicated IP clients, for Shared IP clients, it should be kept blank]
 	*/
 	public String createSender(Object data) {
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return post("advanced", json);
 	}
@@ -1121,7 +1094,6 @@ public class SendinBlueClient {
 	*/
 	public String updateSender(Map<String, Object> data) {
 		String id = data.get("id").toString();
-		Gson gson = new Gson();
 		String json = gson.toJson(data);
 		return put("advanced/" + id, json);
 	}

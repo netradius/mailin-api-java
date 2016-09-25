@@ -8,6 +8,7 @@ are the following
  * Version the client so it's easier to know what's included in each release
  * Modify the client so it follows a more traditional Java coding convention
  * Provide Javadoc documentation for easier consumption
+ * Adding helper classes to make it easier to integrate with the API
 
 The official SendinBlue API documentation is located at https://apidocs.sendinblue.com.
 
