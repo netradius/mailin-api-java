@@ -13,20 +13,20 @@ import java.net.URL;
 import java.util.Map;
 
 
-public class Mailin {
+public class SendinBlueClient {
 
     private static final String EMPTY_STRING = "";
     private String baseUrl;
     private String apiKey;
     private int timeout;
 
-    public Mailin(String baseUrl, String apiKey) {
+    public SendinBlueClient(String baseUrl, String apiKey) {
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
         this.timeout = 30000; //default timeout: 30 secs
     }
 
-    public Mailin(String baseUrl, String apiKey, int timeout) {
+    public SendinBlueClient(String baseUrl, String apiKey, int timeout) {
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
         this.timeout = timeout;
