@@ -1,27 +1,17 @@
-# SendinBlue Java Library
+# SendinBlue Java Client
 
-This is the SendinBlue Java library. It implements the various exposed APIs that you can read more about on https://apidocs.sendinblue.com.
+This is a forked version of the official SendinBlue Java API found at
+https://github.com/mailin-api/mailin-api-java. The goals of this fork
+are the following
+
+ * Create an asset that can be added to a project with maven, ivy and gradle rather than being forced to copy source code
+ * Version the client so it's easier to know what's included in each release
+ * Modify the client so it follows a more traditional Java coding convention 
+
+The official SendinBlue API documentation is located at https://apidocs.sendinblue.com.
 
 SendinBlue API's use HTTP Authentication through an api key. You can create your api key from [API Console](https://my.sendinblue.com/advanced/apikey), after you sign up for an account with SendinBlue. You must use latest version 2.0, access key, for accessing APIs.
 
-
-## Quickstart Guide
-
-Learn how to send email campaigns from your application using SendinBlue API.
-
-You must sign up for SendinBlue account for using APIs. All our APIs require HTTP authentication using access key, which are accessible from your [API Console](https://my.sendinblue.com/advanced/apikey).
-
-The following guides give you a start and understanding of how to use our API.
-
- * [Get all your campaigns](https://apidocs.sendinblue.com/how-to-get-all-you-campaigns/)
- * [Send transactional emails](https://apidocs.sendinblue.com/tutorial-sending-transactional-email/)
- * [Setup your webhooks](https://apidocs.sendinblue.com/how-to-setup-webhooks/)
-
-
 ## Support and Feedback
 
-Be sure to visit the SendinBlue official [documentation website](https://apidocs.sendinblue.com) for additional information about our API.
-
-If you find a bug, please submit the issue in [Github directly](https://github.com/mailin-api/mailin-api-php/issues). 
-
-As always, if you need additional assistance, drop us a note [here](https://apidocs.sendinblue.com/support/).
+If you find a bug, feel free to submit it directly in [Github](https://github.com/netradius/sendinblue-java-client/issues).
