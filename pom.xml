@@ -7,7 +7,7 @@
 	<artifactId>sendinblue-client</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>Sendinblue Client</name>
+	<name>SendinBlue Client</name>
 
 	<properties>
 		<!-- Build Settings -->
