@@ -15,24 +15,46 @@ import java.util.Map;
 
 public class SendinBlueClient {
 
+    public static final int DEFAULT_TIMEOUT = 3000; // 30 seconds
     private static final String EMPTY_STRING = "";
     private String baseUrl;
     private String apiKey;
     private int timeout;
 
+    /**
+     * Creates a new instance of the client using the given url and key.
+     * The default timeout used will be 30 seconds.
+     *
+     * @param baseUrl the base URL to use
+     * @param apiKey the API key
+     */
     public SendinBlueClient(String baseUrl, String apiKey) {
-        this.baseUrl = baseUrl;
-        this.apiKey = apiKey;
-        this.timeout = 30000; //default timeout: 30 secs
+       this(baseUrl, apiKey, DEFAULT_TIMEOUT);
     }
 
+    /**
+     * Creates a new instance of the client using the given url, key and HTTP timeout.
+     *
+     * @param baseUrl the base URL to use
+     * @param apiKey the API key
+     * @param timeout the default timeout to use
+     */
     public SendinBlueClient(String baseUrl, String apiKey, int timeout) {
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
         this.timeout = timeout;
     }
 
-    private String doRequest(String resource, String method, String input) throws Exception {
+    /**
+     * Executes an HTTP request.
+     *
+     * @param resource the resource to request
+     * @param method the HTTP method to use
+     * @param input the data to send
+     * @return the data returned
+     * @throws Exception if an error occurs
+     */
+    protected String doRequest(String resource, String method, String input) throws Exception {
         String url = baseUrl + "/" + resource;
         String key = apiKey;
         Integer req_timeout = timeout;
@@ -125,7 +147,14 @@ public class SendinBlueClient {
         return response.toString();
     }
 
-    public String get(String resource, String input) {
+    /**
+     * Sends an HTTP get request.
+     *
+     * @param resource the resource to request
+     * @param input the data to send
+     * @return the response
+     */
+    protected String get(String resource, String input) {
         try {
             return doRequest(resource, "GET", input);
         } catch (Exception ignored) {
@@ -134,7 +163,14 @@ public class SendinBlueClient {
         return null;
     }
 
-    public String put(String resource, String input) {
+    /**
+     * Sends an HTTP put request.
+     *
+     * @param resource the resource to request
+     * @param input the data to send
+     * @return the response
+     */
+    protected String put(String resource, String input) {
         try {
             return doRequest(resource, "PUT", input);
         } catch (Exception ignored) {
@@ -143,7 +179,14 @@ public class SendinBlueClient {
         return null;
     }
 
-    public String post(String resource, String input) {
+    /**
+     * Sends an HTTP post request.
+     *
+     * @param resource the resource to request
+     * @param input the data to send
+     * @return the response
+     */
+    protected String post(String resource, String input) {
         try {
             return doRequest(resource, "POST", input);
         } catch (Exception ignored) {
@@ -152,7 +195,14 @@ public class SendinBlueClient {
         return null;
     }
 
-    public String delete(String resource, String input) {
+    /**
+     * Sends an HTTP delete request.
+     *
+     * @param resource the resource to request
+     * @param input the data to send
+     * @return the response
+     */
+    protected String delete(String resource, String input) {
         try {
             return doRequest(resource, "DELETE", input);
         } catch (Exception ignored) {
@@ -161,18 +211,16 @@ public class SendinBlueClient {
         return null;
     }
 
-    /*
-        Get Account.
-        No input required
-    */
+    /**
+     * Get Account.
+     */
     public String getAccount() {
         return get("account", EMPTY_STRING);
     }
 
-    /*
-        Get SMTP details.
-        No input required
-    */
+    /**
+     * Get SMTP details.
+     */
     public String getSmtpDetails() {
         return get("account/smtpdetail", EMPTY_STRING);
     }

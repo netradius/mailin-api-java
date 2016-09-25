@@ -6,7 +6,8 @@ are the following
 
  * Create an asset that can be added to a project with maven, ivy and gradle rather than being forced to copy source code
  * Version the client so it's easier to know what's included in each release
- * Modify the client so it follows a more traditional Java coding convention 
+ * Modify the client so it follows a more traditional Java coding convention
+ * Provide Javadoc documentation for easier consumption
 
 The official SendinBlue API documentation is located at https://apidocs.sendinblue.com.
 
