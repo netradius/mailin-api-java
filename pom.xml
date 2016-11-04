@@ -77,6 +77,18 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>netradius-releases</id>
+			<name>NetRadius Releases Repository</name>
+			<url>https://mirrors.netradius.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>netradius-snapshots</id>
+			<name>NetRadius Snapshots Repository</name>
+			<url>https://mirrors.netradius.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
