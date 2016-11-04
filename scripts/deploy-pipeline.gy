@@ -19,7 +19,7 @@ node {
 		}
 		if (currentBuild.result == null) { // Only build if we haven't failed or gone unstable
 			stage('Deploy') {
-				//sh "scripts/deploy-prod.sh"
+				sh "'${mvnHome}/bin/mvn' -DskipTests deploy"
 				hipchatSend color: "GREEN", notify: true, message: "${actor} Job Success: ${jenkinsBuild}"
 			}
 		}
