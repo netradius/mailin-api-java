@@ -392,17 +392,28 @@ public class SendinBlueClient {
 		@options data {Integer} page_limit: This should be a valid number between 1-1000. If page limit is kept empty or >1000, default is 500 [Optional]
 	*/
 	public String getCampaignsV2(Map<String, Object> data) {
-		String type = data.get("type").toString();
-		String status = data.get("status").toString();
-		String page = data.get("page").toString();
-		String page_limit = data.get("page_limit").toString();
-		String url;
+		String type = (data.get("type") != null ? data.get("type").toString() : "");
+		String status = (data.get("status") != null ? data.get("status").toString() : "");
+		String page = (data.get("page") != null ? data.get("page").toString() : "");
+		String page_limit = (data.get("page_limit") != null ? data.get("page_limit").toString() : "");
+		String url = "campaign/detailsv2";
 
-		if (EMPTY_STRING.equals(type) && EMPTY_STRING.equals(status) && EMPTY_STRING.equals(page) && EMPTY_STRING.equals(page_limit)) {
-			url = "campaign/detailsv2/";
-		} else {
-			url = "campaign/detailsv2/type/" + type + "/status/" + status + "/page/" + page + "/page_limit/" + page_limit + "/";
+		if (!EMPTY_STRING.equals(type)) {
+			url = url + "/type/" + type;
 		}
+
+		if (!EMPTY_STRING.equals(status)) {
+			url = url + "/status/" + status;
+		}
+
+		if (!EMPTY_STRING.equals(page)) {
+			url = url + "/page/" + page;
+		}
+
+		if (!EMPTY_STRING.equals(page_limit)) {
+			url = url + "/page_limit/" + page_limit;
+		}
+
 		return get(url, EMPTY_STRING);
 	}
 
