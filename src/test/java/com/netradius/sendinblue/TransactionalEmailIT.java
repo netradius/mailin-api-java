@@ -22,6 +22,8 @@ public class TransactionalEmailIT {
 
 	private static SendinBlueClient client;
 	private static String toAddress;
+	private static String ccAddress;
+	private static String bccAddress;
 	private static String fromAddress;
 
 	@BeforeClass
@@ -36,6 +38,8 @@ public class TransactionalEmailIT {
 		if (isEmpty(fromAddress)) {
 			throw new IllegalArgumentException("TransactionalEmailIT.to.address is mandatory");
 		}
+		ccAddress = config.getProperty("TransactionalEmailIT.cc.address");
+		bccAddress = config.getProperty("TransactionalEmailIT.bcc.address");
 	}
 
 	@Test
@@ -48,8 +52,10 @@ public class TransactionalEmailIT {
 				"</body></html>";
 
 		TransactionalEmail email = new TransactionalEmail()
-				.addTo(toAddress, "Integration Test")
-				.setFrom(fromAddress, "Integration Test")
+				.addTo(toAddress, "Integration Test To")
+				.addCc(ccAddress, "Integration Test Cc")
+				.addBcc(bccAddress, "Integration Test Bcc")
+				.setFrom(fromAddress, "Integration Test From")
 				.setSubject("Transactional Email Integration Test")
 				.setHtml(html)
 				.validate();

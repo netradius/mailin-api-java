@@ -22,22 +22,28 @@ public class TemplateEmailIT {
 
 	private static SendinBlueClient client;
 	private static String toAddress;
+	private static String bccAddress;
+	private static String ccAddress;
 
 	@BeforeClass
 	public static void init() throws IOException {
 		client = IntegrationTestHelper.getClient();
 		Properties config = IntegrationTestHelper.getConfig();
-		toAddress = config.getProperty("TemplateEmailIT.toAddress");
+		toAddress = config.getProperty("TemplateEmailIT.to.Address");
 		if (isEmpty(toAddress)) {
-			throw new IllegalArgumentException("TemplateEmailIT.toAddress is mandatory");
+			throw new IllegalArgumentException("TemplateEmailIT.to.Address is mandatory");
 		}
+		ccAddress = config.getProperty("TemplateEmailIT.cc.Address");
+		bccAddress = config.getProperty("TemplateEmailIT.bcc.Address");
 	}
 
 	@Test
 	public void testTemplateEmail() {
 		TemplateEmail email = new TemplateEmail()
 				.setId(3)
-				.setTo(toAddress)
+				.addTo(toAddress)
+				.addCc(ccAddress)
+				.addBcc(bccAddress)
 				.addAttribute("TEST_ATTRIBUTE", UUID.randomUUID().toString())
 				.validate();
 

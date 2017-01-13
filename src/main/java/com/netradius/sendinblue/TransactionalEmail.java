@@ -37,12 +37,12 @@ public class TransactionalEmail implements Validated<TransactionalEmail> {
 	}
 
 	public TransactionalEmail addCc(String address, String name) {
-		to.put(address, name);
+		cc.put(address, name);
 		return this;
 	}
 
 	public TransactionalEmail addBcc(String address, String name) {
-		to.put(address, name);
+		bcc.put(address, name);
 		return this;
 	}
 

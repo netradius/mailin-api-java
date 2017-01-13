@@ -33,6 +33,7 @@ public class TemplateEmail implements Validated<TemplateEmail> {
 	public TemplateEmail addTo(String address) {
 		if (to == null) {
 			to = address;
+			return this;
 		}
 		to += "|" + address;
 		return this;
@@ -41,6 +42,7 @@ public class TemplateEmail implements Validated<TemplateEmail> {
 	public TemplateEmail addCc(String address) {
 		if (cc == null) {
 			cc = address;
+			return this;
 		}
 		cc += "|" + address;
 		return this;
@@ -49,6 +51,7 @@ public class TemplateEmail implements Validated<TemplateEmail> {
 	public TemplateEmail addBcc(String address) {
 		if (bcc == null) {
 			bcc = address;
+			return this;
 		}
 		bcc += "|" + address;
 		return this;
