@@ -80,13 +80,13 @@
 	<distributionManagement>
 		<repository>
 			<id>netradius-releases</id>
-			<name>NetRadius Releases Repository</name>
-			<url>https://mirrors.netradius.com/nexus/content/repositories/releases</url>
+			<name>Netradius Release Repository</name>
+			<url>https://nexus.netradius.net/repository/netradius-releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>netradius-snapshots</id>
-			<name>NetRadius Snapshots Repository</name>
-			<url>https://mirrors.netradius.com/nexus/content/repositories/snapshots</url>
+			<name>Netradius Snapshots Repository</name>
+			<url>https://nexus.netradius.net/repository/netradius-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
